@@ -1,5 +1,6 @@
 import pandas as pd
 from scipy import stats
+import matplotlib.pyplot as plt
 
 # Read the CSV files into pandas DataFrames
 df1 = pd.read_csv('results1.csv')
@@ -21,6 +22,18 @@ with open('report.txt', 'w') as f:
     for operation_type in operation_types:
         # Get the operations of this type
         operations = [operation for operation in df1.columns if operation.split('_')[-1] == operation_type]
+
+        # Generate a graph for each operation
+        for operation in operations:
+            plt.figure(figsize=(10, 6))
+            plt.plot(df1[operation], label='PC_1')
+            plt.plot(df2[operation], label='PC_2')
+            plt.title(f'Execution time for {operation}')
+            plt.xlabel('Execution (nº)')
+            plt.ylabel('Time (s)')
+            plt.legend()
+            plt.savefig(f'{operation}.png')
+            plt.close()
 
         # Write the mean execution time for each operation in each file and their difference
         f.write(f"\n\nMean execution time for {operation_type} operations:\n")
